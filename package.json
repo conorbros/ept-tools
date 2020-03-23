@@ -2,7 +2,7 @@
   "name": "ept-tools",
   "version": "0.0.1",
   "description": "Entwine Point Tiles utility library",
-  "repository": "github:connormanning/ept-tools",
+  "repository": "github:conorbros/ept-tools",
   "main": "lib/app.js",
   "bin": {
     "ept": "./lib/app.js"
