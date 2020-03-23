@@ -23,6 +23,7 @@
     "log-symbols": "^3.0.0",
     "mkdirp": "^0.5.1",
     "morgan": "^1.9.1",
+    "node-fetch": "^2.6.0",
     "p-limit": "^2.2.0",
     "proj4": "^2.5.0",
     "request": "^2.88.0",
