@@ -96,7 +96,7 @@ export function ecefConverter(from) {
     // If it doesn't exist in proj4 attempt to get the proj4 string from spacialreference.org and define for proj4
     if (!native) {
         const splitCode = from.split(':');
-        const url = `https://spatialreference.org/ref/${splitCode[0]}/${splitCode[1]}/proj4/`;
+        const url = `https://spatialreference.org/ref/${splitCode[0].toLowerCase()}/${splitCode[1]}/proj4/`;
         fetch(url)
             .then(response => response.text())
             .then(body => {
