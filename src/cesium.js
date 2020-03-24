@@ -49,7 +49,7 @@ export async function translate(filename) {
                 Key.stringify(key) + '.json'
             )
         )
-        return Tile.translate({ key, ept, hierarchy })
+        return await Tile.translate({ key, ept, hierarchy })
     }
 
     const key = Key.create(...root.split('-').map(v => parseInt(v, 10)))
@@ -62,7 +62,7 @@ export async function translate(filename) {
                 Key.stringify(key) + '.json'
             )
         )
-        return Tile.translate({ key, ept, hierarchy })
+        return await Tile.translate({ key, ept, hierarchy })
     }
     else if (extension === 'pnts') {
         let buffer = await Util.getBuffer(

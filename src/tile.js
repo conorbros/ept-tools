@@ -3,8 +3,9 @@ import * as Constants from './constants'
 import * as Hierarchy from './hierarchy'
 import * as Key from './key'
 import * as Srs from './srs'
+import { getSRSCodeProj4String } from './proj4Instance';
 
-export function translate({ key, hierarchy, ept }) {
+export async function translate({ key, hierarchy, ept }) {
     const { bounds: rootBounds, srs } = ept
     const rootGeometricError =
         (rootBounds[3] - rootBounds[0]) / Constants.geometricErrorDivisor
@@ -12,6 +13,8 @@ export function translate({ key, hierarchy, ept }) {
     const bounds = Bounds.stepTo(rootBounds, key)
 
     const srsCodeString = Srs.codeString(srs)
+
+    await getSRSCodeProj4String(srsCodeString);
 
     const root = Hierarchy.translate({
         srsCodeString,

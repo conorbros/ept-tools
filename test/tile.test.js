@@ -7,12 +7,12 @@ import * as Tile from '../src/tile'
 const geometricErrorDivisor = Constants.geometricErrorDivisor
 const srs = Srs.create('EPSG:4978')
 
-test('basic root tile transformation', () => {
+test('basic root tile transformation', async () => {
     const key = Key.create()
     const hierarchy = { '0-0-0-0': 1000 }
     const ept = { srs, bounds: [0, 0, 0, 10, 10, 10] }
 
-    const tile = Tile.translate({ key, ept, hierarchy })
+    const tile = await Tile.translate({ key, ept, hierarchy })
     expect(tile).toEqual({
         asset: { version: '1.0' },
         geometricError: Bounds.width(ept.bounds) / geometricErrorDivisor,
@@ -25,7 +25,7 @@ test('basic root tile transformation', () => {
     })
 })
 
-test('truncated root tile transformation', () => {
+test('truncated root tile transformation', async () => {
     const key = Key.create()
     const hierarchy = {
         '0-0-0-0': 1000,
@@ -34,7 +34,7 @@ test('truncated root tile transformation', () => {
     const ept = { srs, bounds: [0, 0, 0, 10, 10, 10] }
     const rootGeometricError = Bounds.width(ept.bounds) / geometricErrorDivisor
 
-    const tile = Tile.translate({ key, ept, hierarchy })
+    const tile = await Tile.translate({ key, ept, hierarchy })
     expect(tile).toEqual({
         asset: { version: '1.0' },
         geometricError: rootGeometricError,
@@ -56,7 +56,7 @@ test('truncated root tile transformation', () => {
     })
 })
 
-test('subtree tile transformation', () => {
+test('subtree tile transformation', async () => {
     const key = Key.create(1, 1, 1, 1)
     const hierarchy = {
         '1-1-1-1': 1,
@@ -66,7 +66,7 @@ test('subtree tile transformation', () => {
     const ept = { srs, bounds: [0, 0, 0, 20, 20, 20] }
     const rootGeometricError = Bounds.width(ept.bounds) / geometricErrorDivisor
 
-    const tile = Tile.translate({ key, ept, hierarchy })
+    const tile = await Tile.translate({ key, ept, hierarchy })
     expect(tile).toEqual({
         asset: { version: '1.0' },
         geometricError: rootGeometricError / 2,
