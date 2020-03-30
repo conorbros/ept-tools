@@ -9,8 +9,9 @@ import * as Srs from './srs'
 import * as Tile from './tile'
 import * as Util from './util'
 import * as Zstandard from './zstandard'
+import { scanColorOptionsResults } from './scanColorOptions'
 
-const dataExtensions = { binary: 'bin', laszip: 'laz', zstandard: 'zst' }
+export const dataExtensions = { binary: 'bin', laszip: 'laz', zstandard: 'zst' }
 
 export async function translate(filename) {
     const dirname = Util.dirname(filename)
@@ -80,12 +81,16 @@ export async function translate(filename) {
             buffer = await Laszip.decompress(buffer, ept)
         }
 
-        const color = Schema.has(schema, 'Red')
-            ? 'color'
-            : Schema.has(schema, 'Intensity')
-                ? 'intensity'
-                : null
+        let color = Schema.has(schema, 'Red') ? 'color' : Schema.has(schema, 'Intensity') ? 'intensity' : null
 
+        if(scanColorOptionsResults.scanned){
+            if(scanColorOptionsResults.useRgb){
+                color = 'color';
+            }else if(scanColorOptionsResults.useIntensity){
+                color = 'intensity';
+            }
+        }
+        console.log(color);
         const options = { color }
         const points = buffer.length / Schema.pointSize(schema)
         const bounds = Bounds.stepTo(eptBounds, key)

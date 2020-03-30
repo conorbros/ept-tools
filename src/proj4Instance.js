@@ -6,9 +6,8 @@ const fetch = require('node-fetch');
  * @param {string} srsCode 
  */
 export async function getSRSCodeProj4String(srsCode) {
-    const splitCode = srsCode.split(':');
-    const url = `https://spatialreference.org/ref/${splitCode[0].toLowerCase()}/${splitCode[1]}/proj4/`;
-    console.log(url);
+    const [code, number] = srsCode.split(':');
+    const url = `https://spatialreference.org/ref/${code.toLowerCase()}/${number}/proj4/`;
     return fetch(url)
         .then(response => response.text())
         .then(body => {

@@ -7,6 +7,7 @@ import * as Proj from './proj'
 import * as Schema from './schema'
 import * as Srs from './srs'
 import * as Util from './util'
+import { scanColorOptionsResults } from './scanColorOptions'
 
 export function buildFeatureTableMetadata({
     ept,
@@ -144,6 +145,14 @@ export function buildRgbFromIntensity({ output, ept, points, buffer, sizes }) {
         for (let point = 0; point < points; ++point) {
             intensities[point] >>= 8
         }
+    }
+
+    const min = scanColorOptionsResults.intensityMinValue;
+    const max = scanColorOptionsResults.intensityMaxValue;
+
+    // Normalize the intensities using the dataset's min and max intensity value
+    for(let point = 0; point < points; ++point){
+        intensities[point] = Math.round((intensities[point] - min) / (max - min) * 255)
     }
 
     let point = 0
