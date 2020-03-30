@@ -41,7 +41,7 @@ async function translatePoints({ input, output, threads }) {
   const pool = Pool(threads);
   const tasks = files.map((file, i) =>
     pool(async () => {
-      //console.log((i + 1).toString() + '/' + files.length + ':', file)
+      console.log((i + 1).toString() + '/' + files.length + ':', file)
       const pnts = await Cesium.translate(
         Util.join(input, "ept-tileset", file)
       );

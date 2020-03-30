@@ -104,6 +104,4 @@ export async function scanColorOptions({ input, threads }) {
   }
 
   scanColorOptionsResults.scanned = true;
-
-  console.log(scanColorOptionsResults);
 }
