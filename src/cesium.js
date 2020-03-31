@@ -90,7 +90,7 @@ export async function translate(filename) {
                 color = 'intensity';
             }
         }
-
+        console.log(color);
         const options = { color }
         const points = buffer.length / Schema.pointSize(schema)
         const bounds = Bounds.stepTo(eptBounds, key)

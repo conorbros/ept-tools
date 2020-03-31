@@ -70,6 +70,7 @@ export async function translate({ input, output, threads, force }) {
   console.log("Scanning files for color options...");
   console.time("Color");
   await scanColorOptions({input, threads});
+  console.log(scanColorOptionsResults);
   console.timeEnd("Color");
 
   console.log("Translating points");

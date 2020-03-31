@@ -84,9 +84,12 @@ export async function scanColorOptions({ input, threads }) {
       );
       
       for (let point = 0; zerosInFile < 20 && point < points; ++point) {
+        let zerosInPoint = 0
         extractors.forEach(extract => {
-          if (extract(buffer, point) === 0) zerosInFile++;
+          if (extract(buffer, point) === 0) zerosInPoint++;
         });
+
+        if(zerosInPoint === 3) zerosInFile++;
       }
       if (zerosInFile >= 20) filesWithNoRgb++;
     })
