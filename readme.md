@@ -1,4 +1,4 @@
-# EPT Tools
+# Updates
 This is my fork of [@connormanning](https://github.com/connormanning)'s ept-tools. I've added in a web lookup of missing SRS codes and it will make point clouds that don't have color greyscale using the intensity values of the points.
 
 <p align="center">
