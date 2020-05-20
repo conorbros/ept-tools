@@ -1,3 +1,3 @@
-import { handler } from './lambda'
+import { handler } from "./lambda";
 
-handler({ })
+handler({});

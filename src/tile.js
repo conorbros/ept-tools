@@ -1,29 +1,29 @@
-import * as Bounds from './bounds'
-import * as Constants from './constants'
-import * as Hierarchy from './hierarchy'
-import * as Key from './key'
-import * as Srs from './srs'
-import { getSRSCodeProj4String } from './proj4Instance';
+import * as Bounds from "./bounds";
+import * as Constants from "./constants";
+import * as Hierarchy from "./hierarchy";
+import * as Key from "./key";
+import * as Srs from "./srs";
+import { getSRSCodeProj4String } from "./proj4Instance";
 
 export async function translate({ key, hierarchy, ept }) {
-    const { bounds: rootBounds, srs } = ept
-    const rootGeometricError =
-        (rootBounds[3] - rootBounds[0]) / Constants.geometricErrorDivisor
-    const geometricError = rootGeometricError / Math.pow(2, Key.depth(key))
-    const bounds = Bounds.stepTo(rootBounds, key)
+  const { bounds: rootBounds, srs } = ept;
+  const rootGeometricError =
+    (rootBounds[3] - rootBounds[0]) / Constants.geometricErrorDivisor;
+  const geometricError = rootGeometricError / Math.pow(2, Key.depth(key));
+  const bounds = Bounds.stepTo(rootBounds, key);
 
-    const srsCodeString = Srs.codeString(srs)
+  const srsCodeString = Srs.codeString(srs);
 
-    await getSRSCodeProj4String(srsCodeString);
+  await getSRSCodeProj4String(srsCodeString);
 
-    const root = Hierarchy.translate({
-        srsCodeString,
-        hierarchy,
-        bounds,
-        key,
-        geometricError
-    })
+  const root = Hierarchy.translate({
+    srsCodeString,
+    hierarchy,
+    bounds,
+    key,
+    geometricError,
+  });
 
-    const tile = { asset: { version: "1.0" }, geometricError, root }
-    return tile
+  const tile = { asset: { version: "1.0" }, geometricError, root };
+  return tile;
 }

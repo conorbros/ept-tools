@@ -1,10 +1,10 @@
 import Pool from "p-limit";
 import * as Util from "./util";
-import * as Cesium from './cesium';
-import * as Key from './key';
-import * as Binary from './binary';
-import * as Laszip from './laszip';
-import * as Schema from './schema';
+import * as Cesium from "./cesium";
+import * as Key from "./key";
+import * as Binary from "./binary";
+import * as Laszip from "./laszip";
+import * as Schema from "./schema";
 
 /**
  * Module I've added on to ept-tools to go through the ept data and determine whether to use rgb values or the intensity
@@ -23,12 +23,12 @@ export const scanColorOptionsResults = {
   useRgb: false,
   useIntensity: false,
   intensityMinValue: null,
-  intensityMaxValue: null
+  intensityMaxValue: null,
 };
 
 /**
- * Scans the ept dataset to determine the values to use for colors 
- * @param {} param0 
+ * Scans the ept dataset to determine the values to use for colors
+ * @param {} param0
  */
 export async function scanColorOptions({ input, threads }) {
   const minValues = [];
@@ -39,7 +39,7 @@ export async function scanColorOptions({ input, threads }) {
   const files = await Util.readDirAsync(root);
   const pool = Pool(threads);
 
-  const tasks = files.map(file => 
+  const tasks = files.map((file) =>
     pool(async () => {
       const filename = Util.join(input, "ept-tileset", file);
 
@@ -49,7 +49,7 @@ export async function scanColorOptions({ input, threads }) {
       const ept = await Util.getJson(Util.protojoin(eptRoot, "ept.json"));
       const { schema, dataType } = ept;
       const dataExtension = Cesium.dataExtensions[dataType];
-      const key = Key.create(...root.split("-").map(v => parseInt(v, 10)));
+      const key = Key.create(...root.split("-").map((v) => parseInt(v, 10)));
       const extract = Binary.getExtractor(schema, "Intensity");
 
       let buffer = await Util.getBuffer(
@@ -73,23 +73,23 @@ export async function scanColorOptions({ input, threads }) {
       for (let point = 0; point < points; ++point) {
         intensities[point] = extract(buffer, point);
       }
-      
+
       maxValues.push(Math.max.apply(Math, intensities));
       minValues.push(Math.min.apply(Math, intensities));
 
       let zerosInFile = 0;
 
-      const extractors = ["Red", "Green", "Blue"].map(v =>
+      const extractors = ["Red", "Green", "Blue"].map((v) =>
         Binary.getExtractor(schema, v)
       );
-      
+
       for (let point = 0; zerosInFile < 20 && point < points; ++point) {
-        let zerosInPoint = 0
-        extractors.forEach(extract => {
+        let zerosInPoint = 0;
+        extractors.forEach((extract) => {
           if (extract(buffer, point) === 0) zerosInPoint++;
         });
 
-        if(zerosInPoint === 3) zerosInFile++;
+        if (zerosInPoint === 3) zerosInFile++;
       }
       if (zerosInFile >= 20) filesWithNoRgb++;
     })
@@ -97,12 +97,12 @@ export async function scanColorOptions({ input, threads }) {
 
   await Promise.all(tasks);
 
-  if(filesWithNoRgb === files.length){
+  if (filesWithNoRgb === files.length) {
     scanColorOptionsResults.useIntensity = true;
 
     scanColorOptionsResults.intensityMinValue = Math.min.apply(Math, minValues);
     scanColorOptionsResults.intensityMaxValue = Math.max.apply(Math, maxValues);
-  }else{
+  } else {
     scanColorOptionsResults.useRgb = true;
   }
 
